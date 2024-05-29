@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ButtonP02 from './component/ButtonP02'
+import ButtonP02 from './components/ButtonP02'
 
 function App() {
   const [nClicks, setNClicks] = useState(0)
