@@ -1,0 +1,65 @@
+/* ELS ESTILS SON DE https://getcssscan.com/css-buttons-examples */
+
+.btnClick {
+    background-color: #fff000;
+    border-radius: 12px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    text-align: center;
+    transition: 200ms;
+    width: 10%;
+    box-sizing: border-box;
+    border: 0;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.btnClick:not(:disabled):hover,
+.btnClick:not(:disabled):focus {
+  outline: 0;
+  background: #f4e603;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.btnClick:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
+
+.btnReiniciar{
+    background-color: #03D8F3;
+    border-radius: 12px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    text-align: center;
+    transition: 200ms;
+    width: 10%;
+    box-sizing: border-box;
+    border: 0;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.btnReiniciar:not(:disabled):hover,
+.btnReiniciar:not(:disabled):focus {
+  outline: 0;
+  background: #24c7dd;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.btnReiniciar:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
