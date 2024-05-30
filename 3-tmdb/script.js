@@ -6,24 +6,115 @@ const keys = {
 }
 
 let moviesResult = document.getElementById("moviesResult");
+let current_query = "";
+let loadingGif = document.getElementById("load");
+let total_pages = 1;
+let current_page = 1;
 
+async function showFavs() {
+    current_page = 1;
+    total_pages = 1;
+    moviesResult.innerHTML = "";
 
-function setFav(id, favBool){
-    moviesResult.innerHTML="";
+    const url = `https://api.themoviedb.org/3/account/${keys.account_id}/favorite/movies?language=en-US&page=1&api_key=${keys.api_key}&session_id=${keys.session_id}&sort_by=created_at.asc`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
 
-    showFavs();
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        data.results.forEach(movie => printMovie(movie, true, false));
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-function showFavs(){
-    moviesResult.innerHTML="";
+async function setFav(id, favBool) {
+    const url = `https://api.themoviedb.org/3/account/${keys.account_id}/favorite?api_key=${keys.api_key}&session_id=${keys.session_id}`;
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ media_type: 'movie', media_id: id, favorite: favBool })
+    };
 
+    try {
+        await fetch(url, options);
+        console.log(`ID ${id} marked as ${favBool}`);
+        await showFavs();
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-function searchMovies(query){
+async function searchMovies(query) {
     clearInput();
     removeActive();
+
+    if (current_query !== query) {
+        current_page = 1;
+        moviesResult.innerHTML = "";
+    }
+
+    current_query = query;
+    const url = `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${current_page}&api_key=${keys.api_key}&session_id=${keys.session_id}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        if (current_page === 1) {
+            total_pages = data.total_pages;
+        }
+        for (const movie of data.results) {
+            const isFavorite = await preferit(movie.id);
+            printMovie(movie, isFavorite, false);
+        }
+        loadingGif.style.display = "none";
+    } catch (error) {
+        console.error(error);
+    }
 }
 
+window.addEventListener('scroll', () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+    if (scrollTop + clientHeight >= scrollHeight - 5 && current_page < total_pages) {
+        current_page++;
+
+        loadingGif.style.display = "block";
+        searchMovies(current_query);
+    }
+});
+
+async function preferit(id) {
+    const url = `https://api.themoviedb.org/3/movie/${id}/account_states?api_key=${keys.api_key}&session_id=${keys.session_id}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        return data.favorite;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
 
 
 /* FUNCIONS D'INTERACCIÓ AMB EL DOM */
