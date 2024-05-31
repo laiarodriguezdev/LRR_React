@@ -72,6 +72,6 @@ function divideNumbers(a, b) {
     });
 }
 
-division(10, 2)
+divideNumbers(10, 2)
     .then(resultat => console.log(resultat))
-    .catch(error => console.log(error.message));
+    .catch(error => console.log(error));
